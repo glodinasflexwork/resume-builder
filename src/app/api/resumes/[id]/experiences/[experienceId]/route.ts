@@ -1,11 +1,12 @@
-// Update all API routes to use the correct Next.js 15 handler signature
+// Update all API routes to use the correct Next.js 15 handler signature with Promise-based params
 export async function GET(
   request: Request,
-  { params }: { params: { id: string, experienceId: string } }
+  { params }: { params: Promise<{ id: string, experienceId: string }> }
 ) {
   try {
-    const resumeId = params.id;
-    const experienceId = params.experienceId;
+    const paramsData = await params;
+    const resumeId = paramsData.id;
+    const experienceId = paramsData.experienceId;
     
     // In a real app, we would fetch the experience from the database
     return Response.json({
@@ -28,11 +29,12 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string, experienceId: string } }
+  { params }: { params: Promise<{ id: string, experienceId: string }> }
 ) {
   try {
-    const resumeId = params.id;
-    const experienceId = params.experienceId;
+    const paramsData = await params;
+    const resumeId = paramsData.id;
+    const experienceId = paramsData.experienceId;
     const body = await request.json();
     
     // Validate required fields
@@ -61,11 +63,12 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string, experienceId: string } }
+  { params }: { params: Promise<{ id: string, experienceId: string }> }
 ) {
   try {
-    const resumeId = params.id;
-    const experienceId = params.experienceId;
+    const paramsData = await params;
+    const resumeId = paramsData.id;
+    const experienceId = paramsData.experienceId;
     
     // In a real app, we would delete the experience from the database
     return Response.json({

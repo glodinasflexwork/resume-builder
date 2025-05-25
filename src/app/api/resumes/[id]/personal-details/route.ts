@@ -1,15 +1,15 @@
-// Update all API routes to use the correct Next.js 15 handler signature
+// Update all API routes to use the correct Next.js 15 handler signature with Promise-based params
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     
     // In a real app, we would fetch personal details from the database
     return Response.json({
       id: '1',
-      resumeId: resumeId,
+      resumeId: id,
       firstName: 'John',
       lastName: 'Doe',
       jobTitle: 'Software Developer',
@@ -29,16 +29,16 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     const body = await request.json();
     
     // In a real app, we would update personal details in the database
     return Response.json({
       id: '1',
-      resumeId: resumeId,
+      resumeId: id,
       firstName: body.firstName || '',
       lastName: body.lastName || '',
       jobTitle: body.jobTitle || '',

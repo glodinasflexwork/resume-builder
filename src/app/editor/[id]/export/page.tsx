@@ -1,58 +1,38 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'PDF Export - Resume Builder',
-  description: 'Export your resume to PDF.',
-};
-
-export default function ExportPDF({ params }: { params: { id: string } }) {
+// Update page component to use the correct Next.js 15 handler signature with Promise-based params
+export default async function ExportPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold text-gray-900">Export Resume</h1>
-        </div>
-      </header>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Export Resume</h1>
+      <p>Preparing export options for resume ID: {id}</p>
       
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg overflow-hidden p-6">
-          <div className="text-center">
-            <svg
-              className="mx-auto h-12 w-12 text-green-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            <h2 className="mt-2 text-lg font-medium text-gray-900">Your resume is ready!</h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Your resume has been successfully generated and is ready for download.
-            </p>
-            <div className="mt-6">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Download PDF
-              </button>
-              <a
-                href={`/editor/${params.id}`}
-                className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-              >
-                Back to Editor
-              </a>
-            </div>
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Export Options</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="border rounded p-4 hover:shadow-md cursor-pointer">
+            <h3 className="font-bold">PDF</h3>
+            <p>Export your resume as a PDF document</p>
+          </div>
+          <div className="border rounded p-4 hover:shadow-md cursor-pointer">
+            <h3 className="font-bold">DOCX</h3>
+            <p>Export your resume as a Word document</p>
           </div>
         </div>
-      </main>
+      </div>
+      
+      <div className="mt-8">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded">
+          Download
+        </button>
+      </div>
     </div>
   );
 }

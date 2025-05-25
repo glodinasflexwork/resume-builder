@@ -1,7 +1,16 @@
-// Simple test API route with dynamic parameter to verify Next.js 15 compatibility
+// Update test API route to use the correct Next.js 15 handler signature with Promise-based params
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  return Response.json({ id: params.id, message: 'Dynamic API is working' });
+  try {
+    const id = (await params).id;
+    return Response.json({
+      id: id,
+      message: "Dynamic API is working"
+    });
+  } catch (error) {
+    console.error('Error in test API:', error);
+    return Response.json({ error: 'Test API failed' }, { status: 500 });
+  }
 }

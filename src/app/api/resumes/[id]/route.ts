@@ -1,14 +1,14 @@
-// Update all API routes to use the correct Next.js 15 handler signature
+// Update all API routes to use the correct Next.js 15 handler signature with Promise-based params
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     
     // In a real app, we would fetch the resume from the database
     return Response.json({
-      id: resumeId,
+      id: id,
       title: 'Software Developer Resume',
       userId: 'user123',
       templateId: 'brussels',
@@ -24,15 +24,15 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     const body = await request.json();
     
     // In a real app, we would update the resume in the database
     return Response.json({
-      id: resumeId,
+      id: id,
       title: body.title || 'Untitled Resume',
       userId: 'user123',
       templateId: body.templateId || 'brussels',
@@ -48,14 +48,14 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     
     // In a real app, we would delete the resume from the database
     return Response.json({
-      message: `Resume ${resumeId} deleted successfully`
+      message: `Resume ${id} deleted successfully`
     });
   } catch (error) {
     console.error('Error deleting resume:', error);

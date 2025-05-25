@@ -1,24 +1,24 @@
-// Update all API routes to use the correct Next.js 15 handler signature
+// Update all API routes to use the correct Next.js 15 handler signature with Promise-based params
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     
     // In a real app, we would fetch languages from the database
     return Response.json({
       languages: [
         {
           id: '1',
-          resumeId: resumeId,
+          resumeId: id,
           name: 'English',
           proficiency: 'Native',
           order: 0
         },
         {
           id: '2',
-          resumeId: resumeId,
+          resumeId: id,
           name: 'Spanish',
           proficiency: 'Intermediate',
           order: 1
@@ -33,10 +33,10 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     const body = await request.json();
     
     // Validate required fields
@@ -47,7 +47,7 @@ export async function POST(
     // In a real app, we would create a language in the database
     return Response.json({
       id: '3',
-      resumeId: resumeId,
+      resumeId: id,
       name: body.name,
       proficiency: body.proficiency,
       order: body.order || 0

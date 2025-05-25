@@ -1,31 +1,31 @@
-// Update all API routes to use the correct Next.js 15 handler signature
+// Update all API routes to use the correct Next.js 15 handler signature with Promise-based params
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     
     // In a real app, we would fetch skills from the database
     return Response.json({
       skills: [
         {
           id: '1',
-          resumeId: resumeId,
+          resumeId: id,
           name: 'JavaScript',
           level: 'Expert',
           order: 0
         },
         {
           id: '2',
-          resumeId: resumeId,
+          resumeId: id,
           name: 'React',
           level: 'Expert',
           order: 1
         },
         {
           id: '3',
-          resumeId: resumeId,
+          resumeId: id,
           name: 'Node.js',
           level: 'Advanced',
           order: 2
@@ -40,10 +40,10 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resumeId = params.id;
+    const id = (await params).id;
     const body = await request.json();
     
     // Validate required fields
@@ -54,7 +54,7 @@ export async function POST(
     // In a real app, we would create a skill in the database
     return Response.json({
       id: '4',
-      resumeId: resumeId,
+      resumeId: id,
       name: body.name,
       level: body.level || 'Intermediate',
       order: body.order || 0
