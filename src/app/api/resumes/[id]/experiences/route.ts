@@ -1,14 +1,13 @@
-import { type NextRequest } from 'next/server';
-
+// Update all API routes to use the correct Next.js 15 handler signature
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const resumeId = params.id;
     
     // In a real app, we would fetch experiences from the database
-    return new Response(JSON.stringify({
+    return Response.json({
       experiences: [
         {
           id: '1',
@@ -23,25 +22,15 @@ export async function GET(
           order: 0
         }
       ]
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   } catch (error) {
     console.error('Error fetching experiences:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch experiences' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ error: 'Failed to fetch experiences' }, { status: 500 });
   }
 }
 
 export async function POST(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -50,16 +39,11 @@ export async function POST(
     
     // Validate required fields
     if (!body.position || !body.company) {
-      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
-        status: 400,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
     
     // In a real app, we would create an experience in the database
-    return new Response(JSON.stringify({
+    return Response.json({
       id: '2',
       resumeId: resumeId,
       position: body.position,
@@ -70,19 +54,9 @@ export async function POST(
       current: body.current || false,
       description: body.description || '',
       order: body.order || 0
-    }), {
-      status: 201,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    }, { status: 201 });
   } catch (error) {
     console.error('Error creating experience:', error);
-    return new Response(JSON.stringify({ error: 'Failed to create experience' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ error: 'Failed to create experience' }, { status: 500 });
   }
 }

@@ -1,7 +1,6 @@
-import { type NextRequest } from 'next/server';
-
+// Update all API routes to use the correct Next.js 15 handler signature
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string, experienceId: string } }
 ) {
   try {
@@ -9,7 +8,7 @@ export async function GET(
     const experienceId = params.experienceId;
     
     // In a real app, we would fetch the experience from the database
-    return new Response(JSON.stringify({
+    return Response.json({
       id: experienceId,
       resumeId: resumeId,
       position: 'Senior Developer',
@@ -20,25 +19,15 @@ export async function GET(
       current: true,
       description: 'Leading development team and implementing new features.',
       order: 0
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   } catch (error) {
     console.error('Error fetching experience:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch experience' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ error: 'Failed to fetch experience' }, { status: 500 });
   }
 }
 
 export async function PUT(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string, experienceId: string } }
 ) {
   try {
@@ -48,16 +37,11 @@ export async function PUT(
     
     // Validate required fields
     if (!body.position || !body.company) {
-      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
-        status: 400,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
     
     // In a real app, we would update the experience in the database
-    return new Response(JSON.stringify({
+    return Response.json({
       id: experienceId,
       resumeId: resumeId,
       position: body.position,
@@ -68,25 +52,15 @@ export async function PUT(
       current: body.current || false,
       description: body.description || '',
       order: body.order || 0
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   } catch (error) {
     console.error('Error updating experience:', error);
-    return new Response(JSON.stringify({ error: 'Failed to update experience' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ error: 'Failed to update experience' }, { status: 500 });
   }
 }
 
 export async function DELETE(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string, experienceId: string } }
 ) {
   try {
@@ -94,21 +68,11 @@ export async function DELETE(
     const experienceId = params.experienceId;
     
     // In a real app, we would delete the experience from the database
-    return new Response(JSON.stringify({
+    return Response.json({
       message: `Experience ${experienceId} deleted successfully`
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   } catch (error) {
     console.error('Error deleting experience:', error);
-    return new Response(JSON.stringify({ error: 'Failed to delete experience' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ error: 'Failed to delete experience' }, { status: 500 });
   }
 }

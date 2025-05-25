@@ -1,14 +1,13 @@
-import { type NextRequest } from 'next/server';
-
+// Update all API routes to use the correct Next.js 15 handler signature
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const resumeId = params.id;
     
     // In a real app, we would fetch personal details from the database
-    return new Response(JSON.stringify({
+    return Response.json({
       id: '1',
       resumeId: resumeId,
       firstName: 'John',
@@ -21,25 +20,15 @@ export async function GET(
       country: 'USA',
       zipCode: '94105',
       summary: 'Experienced software developer with a passion for creating user-friendly applications.'
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   } catch (error) {
     console.error('Error fetching personal details:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch personal details' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ error: 'Failed to fetch personal details' }, { status: 500 });
   }
 }
 
 export async function PUT(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -47,7 +36,7 @@ export async function PUT(
     const body = await request.json();
     
     // In a real app, we would update personal details in the database
-    return new Response(JSON.stringify({
+    return Response.json({
       id: '1',
       resumeId: resumeId,
       firstName: body.firstName || '',
@@ -60,19 +49,9 @@ export async function PUT(
       country: body.country || '',
       zipCode: body.zipCode || '',
       summary: body.summary || ''
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
   } catch (error) {
     console.error('Error updating personal details:', error);
-    return new Response(JSON.stringify({ error: 'Failed to update personal details' }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return Response.json({ error: 'Failed to update personal details' }, { status: 500 });
   }
 }
