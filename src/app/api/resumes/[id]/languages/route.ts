@@ -1,4 +1,5 @@
 // Update all API routes to use the correct Next.js 15 handler signature with Promise-based params
+// and properly await the params before accessing properties
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
