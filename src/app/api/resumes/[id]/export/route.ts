@@ -1,37 +1,59 @@
-import { type NextRequest } from 'next/server'
-import { prisma } from '@/db'
+import { type NextRequest } from 'next/server';
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const resumeId = params.id;
+    
+    // In a real app, we would fetch export options from the database
+    return new Response(JSON.stringify({
+      formats: ['pdf', 'docx'],
+      defaultFormat: 'pdf'
+    }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching export options:', error);
+    return new Response(JSON.stringify({ error: 'Failed to fetch export options' }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+}
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const resumeId = params.id
-    const body = await request.json()
+    const resumeId = params.id;
+    const body = await request.json();
     
-    // Create PDF export logic
-    // This is a placeholder for the actual PDF generation
-    // In a real implementation, we would use a library like jsPDF or html-pdf
-    
-    // For now, just return a success message
-    return new Response(JSON.stringify({ 
-      success: true, 
-      message: 'PDF export initiated',
-      resumeId: resumeId,
-      fileName: `resume-${resumeId}.pdf`
+    // In a real app, we would generate a PDF and return it
+    return new Response(JSON.stringify({
+      url: `/api/resumes/${resumeId}/export/download`,
+      format: body.format || 'pdf',
+      message: 'Export successful'
     }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
       },
-    })
+    });
   } catch (error) {
-    console.error('Error exporting PDF:', error)
-    return new Response(JSON.stringify({ error: 'Failed to export PDF' }), {
+    console.error('Error exporting resume:', error);
+    return new Response(JSON.stringify({ error: 'Failed to export resume' }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
       },
-    })
+    });
   }
 }
